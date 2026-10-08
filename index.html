@@ -1,175 +1,137 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
+
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 <style>
-body{
-  margin:0;
-  background:#07131a;
-  color:#fff;
-  font-family:Arial,sans-serif;
-  text-align:center
+
+body {
+  margin: 0;
+  background: #07131a;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
 }
 
-.wrap{
-  max-width:620px;
-  margin:auto;
-  padding:40px 20px
+.container {
+  max-width: 500px;
+  margin: auto;
+  padding: 50px 20px;
 }
 
-.logo{
-  color:#d8ff4f;
-  font-weight:900;
-  letter-spacing:3px;
-  font-size:18px
+.logo {
+  color: #d8ff4f;
+  font-weight: bold;
+  letter-spacing: 3px;
+  font-size: 18px;
 }
 
-h1{
-  font-size:34px;
-  margin:20px 0 10px
+h1 {
+  font-size: 34px;
+  margin: 25px 0 10px;
 }
 
-.sub{
-  color:#a9b8bd;
-  margin-bottom:30px
+.subtitle {
+  color: #a9b8bd;
+  margin-bottom: 30px;
 }
 
-.phone-box{
-  background:#102932;
-  border:1px solid #31515c;
-  border-radius:20px;
-  padding:25px;
-  margin-top:20px
+.box {
+  background: #102932;
+  border: 1px solid #31515c;
+  border-radius: 20px;
+  padding: 25px;
 }
 
-label{
-  display:block;
-  margin-bottom:12px;
-  font-weight:bold
+label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: bold;
 }
 
-input{
-  width:100%;
-  box-sizing:border-box;
-  background:#07131a;
-  border:1px solid #45636d;
-  color:#fff;
-  border-radius:12px;
-  padding:16px;
-  font-size:20px;
-  text-align:center;
-  direction:ltr;
-  outline:none
+input {
+  width: 100%;
+  box-sizing: border-box;
+  background: #07131a;
+  border: 1px solid #45636d;
+  color: white;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 20px;
+  text-align: center;
+  direction: ltr;
 }
 
-input:focus{
-  border-color:#d8ff4f
+button {
+  width: 100%;
+  margin-top: 18px;
+  border: 0;
+  background: #d8ff4f;
+  color: #081017;
+  border-radius: 15px;
+  padding: 17px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.play{
-  width:100%;
-  margin-top:18px;
-  border:0;
-  background:#d8ff4f;
-  color:#081017;
-  border-radius:15px;
-  padding:17px;
-  font-size:20px;
-  font-weight:900;
-  cursor:pointer
+button:disabled {
+  opacity: .5;
 }
 
-.play:disabled{
-  opacity:.5;
-  cursor:not-allowed
+.result {
+  display: none;
+  margin-top: 25px;
+  background: #102932;
+  border-radius: 20px;
+  padding: 25px;
 }
 
-.note{
-  color:#7f969e;
-  font-size:13px;
-  margin-top:15px
+.prize {
+  color: #d8ff4f;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 20px 0;
 }
 
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:#000c;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:10
+.code {
+  border: 1px dashed #78909a;
+  padding: 14px;
+  border-radius: 10px;
+  direction: ltr;
+  letter-spacing: 2px;
+  font-weight: bold;
 }
 
-.modal.show{
-  display:flex
+.error {
+  color: #ff7777;
+  font-weight: bold;
 }
 
-.box{
-  background:#102932;
-  border-radius:25px;
-  padding:30px;
-  max-width:430px;
-  width:100%;
-  box-sizing:border-box
-}
-
-.prize{
-  font-size:32px;
-  font-weight:900;
-  color:#d8ff4f;
-  margin:20px 0
-}
-
-.code{
-  margin:18px 0;
-  padding:14px;
-  border:1px dashed #78909a;
-  border-radius:10px;
-  letter-spacing:2px;
-  font-weight:bold;
-  direction:ltr
-}
-
-.close{
-  background:#d8ff4f;
-  color:#081017;
-  border:0;
-  font-size:16px;
-  padding:12px 24px;
-  border-radius:10px;
-  font-weight:bold
-}
-
-.loading{
-  color:#a9b8bd
-}
-
-.error{
-  color:#ff7b7b;
-  font-weight:bold
-}
 </style>
 
 </head>
 
 <body>
 
-<div class="wrap">
+<div class="container">
 
-  <div class="logo">PAD-L SUITES</div>
+  <div class="logo">
+    PAD-L SUITES
+  </div>
 
-  <h1>LUCKY NUMBER 🎾</h1>
+  <h1>
+    LUCKY NUMBER 🎾
+  </h1>
 
-  <div class="sub">
+  <div class="subtitle">
     أدخل رقم جوالك واحصل على فرصتك 🎁
   </div>
 
-  <div class="phone-box">
+  <div class="box">
 
-    <label for="phone">
+    <label>
       رقم الجوال
     </label>
 
@@ -177,50 +139,35 @@ input:focus{
       id="phone"
       type="tel"
       inputmode="numeric"
-      autocomplete="tel"
       placeholder="05XXXXXXXX"
-      maxlength="13"
+      maxlength="10"
     >
 
     <button
-      class="play"
-      id="play"
+      id="playButton"
       onclick="playGame()"
     >
       🎁 جرّب حظك
     </button>
 
-    <div class="note">
-      فرصة واحدة فقط لكل رقم جوال
-    </div>
-
   </div>
 
-</div>
+  <div
+    id="result"
+    class="result"
+  >
 
+    <div id="message"></div>
 
-<div class="modal" id="m">
+    <div
+      id="prize"
+      class="prize"
+    ></div>
 
-  <div class="box">
-
-    <div id="s" class="loading">
-      جاري الكشف...
-    </div>
-
-    <div class="prize" id="p">
-      🎾
-    </div>
-
-    <div id="d"></div>
-
-    <div class="code" id="c"></div>
-
-    <button
-      class="close"
-      onclick="closeModal()"
-    >
-      إغلاق
-    </button>
+    <div
+      id="code"
+      class="code"
+    ></div>
 
   </div>
 
@@ -229,142 +176,109 @@ input:focus{
 
 <script>
 
-const phoneInput = document.getElementById('phone');
-const playButton = document.getElementById('play');
+function playGame() {
 
-const modal = document.getElementById('m');
-const statusText = document.getElementById('s');
-const prizeText = document.getElementById('p');
-const detailsText = document.getElementById('d');
-const codeText = document.getElementById('c');
+  const input =
+    document.getElementById("phone");
 
+  const button =
+    document.getElementById("playButton");
 
-function playGame(){
+  const result =
+    document.getElementById("result");
 
-  const phone = phoneInput.value.trim();
+  const message =
+    document.getElementById("message");
 
-  if(!phone){
+  const prize =
+    document.getElementById("prize");
 
-    alert('يرجى إدخال رقم الجوال');
+  const code =
+    document.getElementById("code");
 
-    phoneInput.focus();
-
-    return;
-  }
-
-
-  /*
-    السماح بالأرقام السعودية فقط
-    05XXXXXXXX
-  */
-
-  const cleanPhone =
-    phone.replace(/\D/g,'');
+  const phone =
+    input.value.trim();
 
 
-  if(!/^05\d{8}$/.test(cleanPhone)){
+  if (!/^05\d{8}$/.test(phone)) {
 
-    alert('يرجى إدخال رقم جوال سعودي صحيح');
-
-    phoneInput.focus();
+    alert(
+      "أدخل رقم جوال سعودي صحيح"
+    );
 
     return;
   }
 
 
-  playButton.disabled = true;
+  button.disabled = true;
 
-  modal.classList.add('show');
+  result.style.display = "block";
 
-  statusText.textContent = 'جاري الكشف...';
+  message.className = "";
 
-  statusText.className = 'loading';
+  message.textContent =
+    "جاري الكشف...";
 
-  prizeText.textContent = '🎾';
+  prize.textContent = "";
 
-  detailsText.textContent = '';
-
-  codeText.textContent = '';
+  code.textContent = "";
 
 
   google.script.run
-    .withSuccessHandler(function(r){
 
-      playButton.disabled = false;
+    .withSuccessHandler(function(response) {
+
+      button.disabled = false;
 
 
-      if(!r || !r.ok){
+      if (!response || !response.ok) {
 
-        statusText.textContent = 'تنبيه';
+        message.className = "error";
 
-        statusText.className = 'error';
-
-        prizeText.textContent = '⚠️';
-
-        detailsText.textContent =
-          r && r.message
-            ? r.message
-            : 'حدث خطأ، حاول مرة أخرى';
-
-        codeText.textContent = '';
+        message.textContent =
+          response && response.message
+            ? response.message
+            : "حدث خطأ";
 
         return;
       }
 
 
-      statusText.textContent = 'YOU WON!';
+      message.textContent =
+        "🎉 مبروك!";
 
-      statusText.className = '';
 
-      prizeText.textContent = r.prize;
+      prize.textContent =
+        response.prize;
 
-      detailsText.textContent =
-        'اعرض هذا الكود للموظف عند الاستقبال';
 
-      codeText.textContent = r.code;
+      code.textContent =
+        response.code;
 
     })
-    .withFailureHandler(function(error){
 
-      playButton.disabled = false;
 
-      statusText.textContent = 'حدث خطأ';
+    .withFailureHandler(function(error) {
 
-      statusText.className = 'error';
+      button.disabled = false;
 
-      prizeText.textContent = '⚠️';
+      message.className =
+        "error";
 
-      detailsText.textContent =
-        'تعذر الاتصال بالنظام. حاول مرة أخرى.';
-
-      codeText.textContent = '';
+      message.textContent =
+        "حدث خطأ، حاول مرة أخرى.";
 
       console.error(error);
 
     })
-    .claimNumber(cleanPhone);
+
+
+    .play(phone);
 
 }
-
-
-function closeModal(){
-
-  modal.classList.remove('show');
-
-}
-
-
-phoneInput.addEventListener('keydown', function(e){
-
-  if(e.key === 'Enter'){
-
-    playGame();
-
-  }
-
-});
 
 </script>
 
 </body>
+
 </html>
