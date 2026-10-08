@@ -1,108 +1,258 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PADEL SHOP — Lucky Number</title>
 
-  <title>PADEL SHOP — Lucky Number</title>
+<style>
+*{box-sizing:border-box}
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+body{
+  margin:0;
+  min-height:100vh;
+  background:#07131a;
+  color:white;
+  font-family:Arial,sans-serif;
+  text-align:center;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #07131a;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
+.wrap{
+  max-width:620px;
+  margin:auto;
+  padding:25px 15px;
+}
 
-    .box {
-      width: 90%;
-      max-width: 450px;
-      padding: 40px 25px;
-      background: #102932;
-      border-radius: 28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
-    }
+.logo{
+  color:#d8ff4f;
+  font-weight:900;
+  letter-spacing:3px;
+  margin-bottom:10px;
+}
 
-    .logo {
-      color: #d8ff4f;
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: 3px;
-      margin-bottom: 25px;
-    }
+h1{
+  font-size:34px;
+  margin:10px 0;
+}
 
-    .ball {
-      font-size: 55px;
-      margin-bottom: 10px;
-    }
+.sub{
+  color:#a9b8bd;
+}
 
-    h1 {
-      font-size: 34px;
-      margin: 10px 0;
-    }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:25px;
+}
 
-    p {
-      color: #a9b8bd;
-      font-size: 17px;
-      line-height: 1.7;
-    }
+.num{
+  border:1px solid #31515c;
+  background:#102932;
+  color:white;
+  border-radius:16px;
+  padding:20px 5px;
+  font-size:24px;
+  font-weight:900;
+}
 
-    .start {
-      display: block;
-      margin-top: 30px;
-      padding: 17px;
-      border-radius: 15px;
-      background: #d8ff4f;
-      color: #07131a;
-      text-decoration: none;
-      font-size: 20px;
-      font-weight: 900;
-    }
+.num:disabled{
+  opacity:.3;
+}
 
-    .small {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #71858c;
-    }
-  </style>
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#000c;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.box{
+  background:#102932;
+  border-radius:25px;
+  padding:30px;
+  max-width:430px;
+  width:100%;
+}
+
+.prize{
+  font-size:32px;
+  font-weight:900;
+  color:#d8ff4f;
+  margin:18px 0;
+}
+
+.code{
+  margin:18px 0;
+  padding:12px;
+  border:1px dashed #78909a;
+  border-radius:10px;
+  letter-spacing:2px;
+}
+
+.close{
+  background:#d8ff4f;
+  color:#081017;
+  border:0;
+  font-size:16px;
+  padding:12px 24px;
+  border-radius:10px;
+  font-weight:bold;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="box">
+<div class="wrap">
 
-    <div class="logo">PADEL SHOP</div>
+<div class="logo">PADEL SHOP</div>
 
-    <div class="ball">🎾</div>
+<h1>LUCKY NUMBER 🎾</h1>
 
-    <h1>LUCKY NUMBER</h1>
+<div class="sub">
+اختر رقمًا واحدًا واكتشف جائزتك
+</div>
 
-    <p>
-      اختر رقمًا واحدًا<br>
-      واكتشف جائزتك 🎁
-    </p>
+<div class="grid" id="grid"></div>
 
-    <a
-      class="start"
-      href="https://script.google.com/macros/s/AKfycbyYvWo70hkG57tU_D58yqD6vnUlOKSkiWV0ElkJ9j8-xt4jjHkgLXJJBbF8sugJFNZy/exec"
-    >
-      🎯 ابدأ اللعبة
-    </a>
+</div>
 
-    <div class="small">
-      اضغط على الزر لبدء اللعبة
-    </div>
+<div class="modal" id="modal">
 
-  </div>
+<div class="box">
+
+<div id="status">جاري الكشف...</div>
+
+<div class="prize" id="prize">🎾</div>
+
+<div id="details"></div>
+
+<div class="code" id="code"></div>
+
+<button class="close" onclick="closeModal()">
+إغلاق
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const API =
+"https://script.google.com/macros/s/AKfycbyYvWo70hkG57tU_D58yqD6vnUlOKSkiWV0ElkJ9j8-xt4jjHkgLXJJBbF8sugJFNZy/exec";
+
+const grid = document.getElementById("grid");
+const modal = document.getElementById("modal");
+const statusBox = document.getElementById("status");
+const prizeBox = document.getElementById("prize");
+const detailsBox = document.getElementById("details");
+const codeBox = document.getElementById("code");
+
+for(let i=1;i<=20;i++){
+
+  const button=document.createElement("button");
+
+  button.className="num";
+  button.textContent=i;
+
+  button.onclick=()=>pickNumber(i,button);
+
+  grid.appendChild(button);
+}
+
+function pickNumber(number,button){
+
+  button.disabled=true;
+
+  modal.classList.add("show");
+
+  statusBox.textContent="جاري الكشف...";
+  prizeBox.textContent="🎾";
+  detailsBox.textContent="";
+  codeBox.textContent="";
+
+  const callback =
+    "luckyCallback_" +
+    Date.now() +
+    "_" +
+    Math.floor(Math.random()*10000);
+
+  window[callback]=function(result){
+
+    try{
+
+      if(!result.ok){
+
+        statusBox.textContent="⚠️";
+        prizeBox.textContent="";
+        detailsBox.textContent=result.message || "حدث خطأ";
+        return;
+      }
+
+      statusBox.textContent="YOU WON! 🎉";
+
+      prizeBox.textContent=result.prize;
+
+      detailsBox.textContent=
+        "اعرض هذا الكود للموظف عند الاستقبال";
+
+      codeBox.textContent=result.code;
+
+    }finally{
+
+      delete window[callback];
+
+      const script=document.getElementById(callback);
+
+      if(script) script.remove();
+
+    }
+  };
+
+  const script=document.createElement("script");
+
+  script.id=callback;
+
+  script.src =
+    API +
+    "?api=claim" +
+    "&number=" + encodeURIComponent(number) +
+    "&callback=" + encodeURIComponent(callback);
+
+  script.onerror=function(){
+
+    statusBox.textContent="⚠️";
+
+    prizeBox.textContent="";
+
+    detailsBox.textContent=
+      "حدث خطأ في الاتصال. حاول مرة أخرى.";
+
+    delete window[callback];
+
+    script.remove();
+
+  };
+
+  document.body.appendChild(script);
+}
+
+function closeModal(){
+
+  modal.classList.remove("show");
+
+}
+
+</script>
 
 </body>
 </html>
