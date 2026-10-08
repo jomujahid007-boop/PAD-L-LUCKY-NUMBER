@@ -1,63 +1,95 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PADEL SHOP — Lucky Number</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <style>
-*{box-sizing:border-box}
-
 body{
   margin:0;
-  min-height:100vh;
   background:#07131a;
-  color:white;
+  color:#fff;
   font-family:Arial,sans-serif;
-  text-align:center;
+  text-align:center
 }
 
 .wrap{
   max-width:620px;
   margin:auto;
-  padding:25px 15px;
+  padding:40px 20px
 }
 
 .logo{
   color:#d8ff4f;
   font-weight:900;
   letter-spacing:3px;
-  margin-bottom:10px;
+  font-size:18px
 }
 
 h1{
   font-size:34px;
-  margin:10px 0;
+  margin:20px 0 10px
 }
 
 .sub{
   color:#a9b8bd;
+  margin-bottom:30px
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-top:25px;
-}
-
-.num{
-  border:1px solid #31515c;
+.phone-box{
   background:#102932;
-  color:white;
-  border-radius:16px;
-  padding:20px 5px;
-  font-size:24px;
-  font-weight:900;
+  border:1px solid #31515c;
+  border-radius:20px;
+  padding:25px;
+  margin-top:20px
 }
 
-.num:disabled{
-  opacity:.3;
+label{
+  display:block;
+  margin-bottom:12px;
+  font-weight:bold
+}
+
+input{
+  width:100%;
+  box-sizing:border-box;
+  background:#07131a;
+  border:1px solid #45636d;
+  color:#fff;
+  border-radius:12px;
+  padding:16px;
+  font-size:20px;
+  text-align:center;
+  direction:ltr;
+  outline:none
+}
+
+input:focus{
+  border-color:#d8ff4f
+}
+
+.play{
+  width:100%;
+  margin-top:18px;
+  border:0;
+  background:#d8ff4f;
+  color:#081017;
+  border-radius:15px;
+  padding:17px;
+  font-size:20px;
+  font-weight:900;
+  cursor:pointer
+}
+
+.play:disabled{
+  opacity:.5;
+  cursor:not-allowed
+}
+
+.note{
+  color:#7f969e;
+  font-size:13px;
+  margin-top:15px
 }
 
 .modal{
@@ -68,10 +100,11 @@ h1{
   align-items:center;
   justify-content:center;
   padding:18px;
+  z-index:10
 }
 
 .modal.show{
-  display:flex;
+  display:flex
 }
 
 .box{
@@ -80,21 +113,24 @@ h1{
   padding:30px;
   max-width:430px;
   width:100%;
+  box-sizing:border-box
 }
 
 .prize{
   font-size:32px;
   font-weight:900;
   color:#d8ff4f;
-  margin:18px 0;
+  margin:20px 0
 }
 
 .code{
   margin:18px 0;
-  padding:12px;
+  padding:14px;
   border:1px dashed #78909a;
   border-radius:10px;
   letter-spacing:2px;
+  font-weight:bold;
+  direction:ltr
 }
 
 .close{
@@ -104,153 +140,229 @@ h1{
   font-size:16px;
   padding:12px 24px;
   border-radius:10px;
-  font-weight:bold;
+  font-weight:bold
+}
+
+.loading{
+  color:#a9b8bd
+}
+
+.error{
+  color:#ff7b7b;
+  font-weight:bold
 }
 </style>
+
 </head>
 
 <body>
 
 <div class="wrap">
 
-<div class="logo">PADEL SHOP</div>
+  <div class="logo">PAD-L SUITES</div>
 
-<h1>LUCKY NUMBER 🎾</h1>
+  <h1>LUCKY NUMBER 🎾</h1>
 
-<div class="sub">
-اختر رقمًا واحدًا واكتشف جائزتك
+  <div class="sub">
+    أدخل رقم جوالك واحصل على فرصتك 🎁
+  </div>
+
+  <div class="phone-box">
+
+    <label for="phone">
+      رقم الجوال
+    </label>
+
+    <input
+      id="phone"
+      type="tel"
+      inputmode="numeric"
+      autocomplete="tel"
+      placeholder="05XXXXXXXX"
+      maxlength="13"
+    >
+
+    <button
+      class="play"
+      id="play"
+      onclick="playGame()"
+    >
+      🎁 جرّب حظك
+    </button>
+
+    <div class="note">
+      فرصة واحدة فقط لكل رقم جوال
+    </div>
+
+  </div>
+
 </div>
 
-<div class="grid" id="grid"></div>
+
+<div class="modal" id="m">
+
+  <div class="box">
+
+    <div id="s" class="loading">
+      جاري الكشف...
+    </div>
+
+    <div class="prize" id="p">
+      🎾
+    </div>
+
+    <div id="d"></div>
+
+    <div class="code" id="c"></div>
+
+    <button
+      class="close"
+      onclick="closeModal()"
+    >
+      إغلاق
+    </button>
+
+  </div>
 
 </div>
 
-<div class="modal" id="modal">
-
-<div class="box">
-
-<div id="status">جاري الكشف...</div>
-
-<div class="prize" id="prize">🎾</div>
-
-<div id="details"></div>
-
-<div class="code" id="code"></div>
-
-<button class="close" onclick="closeModal()">
-إغلاق
-</button>
-
-</div>
-
-</div>
 
 <script>
 
-const API =
-"https://script.google.com/macros/s/AKfycbyYvWo70hkG57tU_D58yqD6vnUlOKSkiWV0ElkJ9j8-xt4jjHkgLXJJBbF8sugJFNZy/exec";
+const phoneInput = document.getElementById('phone');
+const playButton = document.getElementById('play');
 
-const grid = document.getElementById("grid");
-const modal = document.getElementById("modal");
-const statusBox = document.getElementById("status");
-const prizeBox = document.getElementById("prize");
-const detailsBox = document.getElementById("details");
-const codeBox = document.getElementById("code");
+const modal = document.getElementById('m');
+const statusText = document.getElementById('s');
+const prizeText = document.getElementById('p');
+const detailsText = document.getElementById('d');
+const codeText = document.getElementById('c');
 
-for(let i=1;i<=20;i++){
 
-  const button=document.createElement("button");
+function playGame(){
 
-  button.className="num";
-  button.textContent=i;
+  const phone = phoneInput.value.trim();
 
-  button.onclick=()=>pickNumber(i,button);
+  if(!phone){
 
-  grid.appendChild(button);
-}
+    alert('يرجى إدخال رقم الجوال');
 
-function pickNumber(number,button){
+    phoneInput.focus();
 
-  button.disabled=true;
+    return;
+  }
 
-  modal.classList.add("show");
 
-  statusBox.textContent="جاري الكشف...";
-  prizeBox.textContent="🎾";
-  detailsBox.textContent="";
-  codeBox.textContent="";
+  /*
+    السماح بالأرقام السعودية فقط
+    05XXXXXXXX
+  */
 
-  const callback =
-    "luckyCallback_" +
-    Date.now() +
-    "_" +
-    Math.floor(Math.random()*10000);
+  const cleanPhone =
+    phone.replace(/\D/g,'');
 
-  window[callback]=function(result){
 
-    try{
+  if(!/^05\d{8}$/.test(cleanPhone)){
 
-      if(!result.ok){
+    alert('يرجى إدخال رقم جوال سعودي صحيح');
 
-        statusBox.textContent="⚠️";
-        prizeBox.textContent="";
-        detailsBox.textContent=result.message || "حدث خطأ";
+    phoneInput.focus();
+
+    return;
+  }
+
+
+  playButton.disabled = true;
+
+  modal.classList.add('show');
+
+  statusText.textContent = 'جاري الكشف...';
+
+  statusText.className = 'loading';
+
+  prizeText.textContent = '🎾';
+
+  detailsText.textContent = '';
+
+  codeText.textContent = '';
+
+
+  google.script.run
+    .withSuccessHandler(function(r){
+
+      playButton.disabled = false;
+
+
+      if(!r || !r.ok){
+
+        statusText.textContent = 'تنبيه';
+
+        statusText.className = 'error';
+
+        prizeText.textContent = '⚠️';
+
+        detailsText.textContent =
+          r && r.message
+            ? r.message
+            : 'حدث خطأ، حاول مرة أخرى';
+
+        codeText.textContent = '';
+
         return;
       }
 
-      statusBox.textContent="YOU WON! 🎉";
 
-      prizeBox.textContent=result.prize;
+      statusText.textContent = 'YOU WON!';
 
-      detailsBox.textContent=
-        "اعرض هذا الكود للموظف عند الاستقبال";
+      statusText.className = '';
 
-      codeBox.textContent=result.code;
+      prizeText.textContent = r.prize;
 
-    }finally{
+      detailsText.textContent =
+        'اعرض هذا الكود للموظف عند الاستقبال';
 
-      delete window[callback];
+      codeText.textContent = r.code;
 
-      const script=document.getElementById(callback);
+    })
+    .withFailureHandler(function(error){
 
-      if(script) script.remove();
+      playButton.disabled = false;
 
-    }
-  };
+      statusText.textContent = 'حدث خطأ';
 
-  const script=document.createElement("script");
+      statusText.className = 'error';
 
-  script.id=callback;
+      prizeText.textContent = '⚠️';
 
-  script.src =
-    API +
-    "?api=claim" +
-    "&number=" + encodeURIComponent(number) +
-    "&callback=" + encodeURIComponent(callback);
+      detailsText.textContent =
+        'تعذر الاتصال بالنظام. حاول مرة أخرى.';
 
-  script.onerror=function(){
+      codeText.textContent = '';
 
-    statusBox.textContent="⚠️";
+      console.error(error);
 
-    prizeBox.textContent="";
+    })
+    .claimNumber(cleanPhone);
 
-    detailsBox.textContent=
-      "حدث خطأ في الاتصال. حاول مرة أخرى.";
-
-    delete window[callback];
-
-    script.remove();
-
-  };
-
-  document.body.appendChild(script);
 }
+
 
 function closeModal(){
 
-  modal.classList.remove("show");
+  modal.classList.remove('show');
 
 }
+
+
+phoneInput.addEventListener('keydown', function(e){
+
+  if(e.key === 'Enter'){
+
+    playGame();
+
+  }
+
+});
 
 </script>
 
