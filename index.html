@@ -162,6 +162,8 @@ button:disabled {
 
 <script>
 
+<script>
+
 const SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbyYvWo70hkG57tU_D58yqD6vnUlOKSkiWV0ElkJ9j8-xt4jjHkgLXJJBbF8sugJFNZy/exec";
 
@@ -187,6 +189,7 @@ function playGame() {
     document.getElementById("code");
 
 
+  // التحقق من رقم الجوال
   if (!/^05\d{8}$/.test(phone)) {
 
     alert("أدخل رقم جوال سعودي صحيح");
@@ -195,6 +198,7 @@ function playGame() {
   }
 
 
+  // تعطيل الزر أثناء الطلب
   button.disabled = true;
 
   result.style.display = "block";
@@ -209,6 +213,7 @@ function playGame() {
   code.textContent = "";
 
 
+  // إنشاء اسم Callback عشوائي
   const callbackName =
     "PADL_CALLBACK_" + Date.now();
 
@@ -234,11 +239,14 @@ function playGame() {
       }
 
 
+      // النتيجة
       message.textContent =
         "🎉 مبروك!";
 
+
       prize.textContent =
         response.prize;
+
 
       code.textContent =
         response.code;
@@ -249,6 +257,7 @@ function playGame() {
     };
 
 
+  // إنشاء طلب JSONP
   const script =
     document.createElement("script");
 
@@ -286,7 +295,9 @@ function playGame() {
     delete window[callbackName];
 
     if (script.parentNode) {
+
       script.parentNode.removeChild(script);
+
     }
 
   }
