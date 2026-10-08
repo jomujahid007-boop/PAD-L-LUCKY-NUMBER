@@ -2,11 +2,12 @@
 <html lang="ar" dir="rtl">
 
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PAD-L Lucky Number</title>
 
 <style>
-
 body {
   margin: 0;
   background: #07131a;
@@ -38,7 +39,8 @@ h1 {
   margin-bottom: 30px;
 }
 
-.box {
+.box,
+.result {
   background: #102932;
   border: 1px solid #31515c;
   border-radius: 20px;
@@ -83,9 +85,6 @@ button:disabled {
 .result {
   display: none;
   margin-top: 25px;
-  background: #102932;
-  border-radius: 20px;
-  padding: 25px;
 }
 
 .prize {
@@ -108,7 +107,6 @@ button:disabled {
   color: #ff7777;
   font-weight: bold;
 }
-
 </style>
 
 </head>
@@ -131,9 +129,7 @@ button:disabled {
 
   <div class="box">
 
-    <label>
-      رقم الجوال
-    </label>
+    <label>رقم الجوال</label>
 
     <input
       id="phone"
@@ -152,34 +148,28 @@ button:disabled {
 
   </div>
 
-  <div
-    id="result"
-    class="result"
-  >
+  <div id="result" class="result">
 
     <div id="message"></div>
 
-    <div
-      id="prize"
-      class="prize"
-    ></div>
+    <div id="prize" class="prize"></div>
 
-    <div
-      id="code"
-      class="code"
-    ></div>
+    <div id="code" class="code"></div>
 
   </div>
 
 </div>
 
-
 <script>
+
+const SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbyYvWo70hkG57tU_D58yqD6vnUlOKSkiWV0ElkJ9j8-xt4jjHkgLXJJBbF8sugJFNZy/exec";
+
 
 function playGame() {
 
-  const input =
-    document.getElementById("phone");
+  const phone =
+    document.getElementById("phone").value.trim();
 
   const button =
     document.getElementById("playButton");
@@ -196,15 +186,10 @@ function playGame() {
   const code =
     document.getElementById("code");
 
-  const phone =
-    input.value.trim();
-
 
   if (!/^05\d{8}$/.test(phone)) {
 
-    alert(
-      "أدخل رقم جوال سعودي صحيح"
-    );
+    alert("أدخل رقم جوال سعودي صحيح");
 
     return;
   }
@@ -224,9 +209,12 @@ function playGame() {
   code.textContent = "";
 
 
-  google.script.run
+  const callbackName =
+    "PADL_CALLBACK_" + Date.now();
 
-    .withSuccessHandler(function(response) {
+
+  window[callbackName] =
+    function(response) {
 
       button.disabled = false;
 
@@ -240,6 +228,8 @@ function playGame() {
             ? response.message
             : "حدث خطأ";
 
+        cleanup();
+
         return;
       }
 
@@ -247,18 +237,33 @@ function playGame() {
       message.textContent =
         "🎉 مبروك!";
 
-
       prize.textContent =
         response.prize;
-
 
       code.textContent =
         response.code;
 
-    })
+
+      cleanup();
+
+    };
 
 
-    .withFailureHandler(function(error) {
+  const script =
+    document.createElement("script");
+
+
+  script.src =
+    SCRIPT_URL +
+    "?action=play" +
+    "&phone=" +
+    encodeURIComponent(phone) +
+    "&callback=" +
+    callbackName;
+
+
+  script.onerror =
+    function() {
 
       button.disabled = false;
 
@@ -266,14 +271,25 @@ function playGame() {
         "error";
 
       message.textContent =
-        "حدث خطأ، حاول مرة أخرى.";
+        "تعذر الاتصال بالخادم.";
 
-      console.error(error);
+      cleanup();
 
-    })
+    };
 
 
-    .play(phone);
+  document.body.appendChild(script);
+
+
+  function cleanup() {
+
+    delete window[callbackName];
+
+    if (script.parentNode) {
+      script.parentNode.removeChild(script);
+    }
+
+  }
 
 }
 
